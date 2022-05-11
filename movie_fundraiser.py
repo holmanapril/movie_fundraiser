@@ -51,6 +51,7 @@ def user_age(question, error, error_2):
 
 
 def ticket_price():
+    global cost
     global age
     cost = 0
     # If age is less than 16 cost = 7.5
@@ -62,41 +63,41 @@ def ticket_price():
     # Anything else = 6.5
     else:
         cost += 6.5
-    print("${:.2f}".format(cost))
+    print("Your ticket will cost ${:.2f}\n".format(cost))
+    return cost
 
 
-def snacks(question, error, question_2, error_2, question_3):
+def snacks(question_1, question_2, question_3, error):
+    global snack_price_total
+    snack_price_total = 0
     snack_choices = ["Popcorn", "M&M", "Pitachips", "Orangejuice", "Water"]
-    keep_going = False
-    while keep_going is False:
-        snack_yes_no = str(input(question_3)).lower().strip()
-        if snack_yes_no == "y" or snack_yes_no == "yes":
-            valid = False
-            print(question)
-            while not valid:
-                user_choice = str(input()).title().strip()
-                if user_choice not in snack_choices:
-                    print(error)
-                else:
-                    print(user_choice)
-                    valid = False
-                    while not valid:
-                        try:
-                            user_snack_amount = int(input(question_2))
-                            if user_snack_amount <= 0:
-                                print(error_2)
-                            elif user_snack_amount >= 6:
-                                print(error_2)
-                            else:
-                                print(user_snack_amount)
-                                valid = True
-                        except ValueError:
-                            print(error_2)
-        else:
-            keep_going = True
+    snack_prices = [2.50, 3.00, 4.50, 3.25, 2.00]
+    valid = False
+    while not valid:
+        options = False
+        try:
+            yes_no = str(input(question_1)).strip().lower()
+            if yes_no == "y" or yes_no == "yes":
+                while not options:
+                    user_choice = int(input(question_2))
+                    user_snack_amount = int(input(question_3))
+                    if user_choice >= 6 or user_choice < 0 or user_snack_amount > 5 or user_snack_amount < 1:
+                        print(error)
+                    else:
+                        snack_price = snack_prices[user_choice - 1] * user_snack_amount
+                        snack_price_total += snack_price
+                        print("Your choice of {} {} costs: ${:.2f}\n".format(user_snack_amount,
+                              snack_choices[user_choice - 1], snack_price))
+                        options = True
+            elif yes_no == "n" or yes_no == "no":
+                print("Total price of your snacks is:${}".format(snack_price_total))
+                return snack_price_total
+        except ValueError:
+            print(error)
 
 
 def payment(question, error):
+    global payment_method
     valid = False
     print(question)
     while not valid:
@@ -114,19 +115,33 @@ def payment(question, error):
             print(error)
 
 
+def profit():
+    snack_price_total_profit = snack_price_total * 0.2
+    ticket_profit = cost - 5
+    total_price = snack_price_total + cost
+    if payment_method == "Credit":
+        surcharge = total_price * 0.05
+        total_price += surcharge
+    print("The total price is: ${}".format(total_price))
+    total_profit = snack_price_total_profit + ticket_profit
+    print("Profit: ${}".format(total_profit))
+
+
 # Main Routine
+global snack_price_total
+global cost
+global payment_method
 not_blank("What is your name?", "Please enter a valid full name(first and last name)")
-user_age("How old are you?", "Please enter a valid age between(12 and 130)",
-         "You are too young to be doing this")
 age = user_age("How old are you?", "Please enter a valid age between(12 and 130)",
                "You are too young to be doing this")
 if age >= 12:
     ticket_price()
-snacks("What snack would you like?", "Please enter a valid snack choice(Please do not put spaces between words",
-       "How many would you like?", "Please enter a valid amount(The maximum you can order of each snack is 5)",
-       "Would you like to order any/more snacks?\nThe Options are:\nPopcorn\nM&M\nPita chips\nOrange Juice\nWater?")
-payment("Will you be paying cash or credit?(enter 1 or 2)\nIf paying with credit "
-        "there will be a surcharge of 2% to the final price\nOption 1                "
-        "Option 2\nCash                    Credit", "Please enter a valid input(1 or 2)"
-        "\nOption 1                "
-        "Option 2\nCash                    Credit")
+    snacks("Do you want to order some/more snacks?\n", "Pick a snack(pick the number you want)\n\nThe options are:\n"
+           "1. Popcorn: $2.50\n2. M&M: $3.00\n3. Pitachips: $4.50\n4. Orange Juice: $3.25\n5. Water: $2.00\n",
+           "Choose an amount(maximum is 5)", "Please enter a valid snack number")
+    payment("Will you be paying cash or credit?(enter 1 or 2)\nIf paying with credit "
+            "there will be a surcharge of 2% to the final price\nOption 1                "
+            "Option 2\nCash                    Credit", "Please enter a valid input(1 or 2)"
+            "\nOption 1                "
+            "Option 2\nCash                    Credit")
+    profit()
