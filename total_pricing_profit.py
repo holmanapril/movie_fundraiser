@@ -22,7 +22,14 @@ def user_age(question, error, error_2):
             print(error)
 
 
-def ticket_price():
+def ticket_amount():
+    t_amount = int(input("How many tickets would you like to get?"))
+    for i in range(t_amount):
+        ages = int(input("What age will the first ticket be for?"))
+        print(age)
+
+
+def ticket_price_amount():
     global cost
     global age
     cost = 0
@@ -58,7 +65,8 @@ def snacks(question_1, question_2, question_3, error):
                     else:
                         snack_price = snack_prices[user_choice - 1] * user_snack_amount
                         snack_price_total += snack_price
-                        print("Your choice of {} {} costs: ${:.2f}\n".format(user_snack_amount, snack_choices[user_choice - 1], snack_price))
+                        print("Your choice of {} {} costs: ${:.2f}\n".format(user_snack_amount,
+                              snack_choices[user_choice - 1], snack_price))
                         options = True
             elif yes_no == "n" or yes_no == "no":
                 print("Total price of your snacks is:${}".format(snack_price_total))
@@ -102,16 +110,21 @@ def profit():
 global snack_price_total
 global cost
 global payment_method
-age = user_age("How old are you?", "Please enter a valid age between(12 and 130)",
-               "You are too young to be doing this")
-if age >= 12:
-    ticket_price()
-    snacks("Do you want to order some/more snacks?\n", "Pick a snack(pick the number you want)\n\nThe options are:\n"
-           "1. Popcorn: $2.50\n2. M&M: $3.00\n3. Pitachips: $4.50\n4. Orange Juice: $3.25\n5. Water: $2.00\n",
-           "Choose an amount(maximum is 5)", "Please enter a valid snack number")
-    payment("Will you be paying cash or credit?(enter 1 or 2)\nIf paying with credit "
-            "there will be a surcharge of 2% to the final price\nOption 1                "
-            "Option 2\nCash                    Credit", "Please enter a valid input(1 or 2)"
-            "\nOption 1                "
-            "Option 2\nCash                    Credit")
-    profit()
+orders = []
+tickets = 150
+while tickets > 0:
+    age = user_age("How old are you?", "Please enter a valid age between(12 and 130)",
+                   "You are too young to be doing this")
+    if age >= 12:
+        ticket_price()
+        snacks("Do you want to order some/more snacks?\n",
+               "Pick a snack(pick the number you want)\n\nThe options are:\n"
+               "1. Popcorn: $2.50\n2. M&M: $3.00\n3. Pitachips: $4.50\n4. Orange Juice: $3.25\n5. Water: $2.00\n",
+               "Choose an amount(maximum is 5)", "Please enter a valid snack number")
+        payment("Will you be paying cash or credit?(enter 1 or 2)\nIf paying with credit "
+                "there will be a surcharge of 2% to the final price\nOption 1                "
+                "Option 2\nCash                    Credit", "Please enter a valid input(1 or 2)"
+                "\nOption 1                "
+                "Option 2\nCash                    Credit")
+        profit()
+        tickets -= 1
