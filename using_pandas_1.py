@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+
+
 # Functions
 def not_blank(question, error):
     global user_list
@@ -131,17 +135,13 @@ def profit():
         total_price += surcharge
     print("The total price is: ${}".format(total_price))
     total_profit = snack_price_total_profit + ticket_profit
-    # user_list.append(total_profit)
-    # user_list.append(total_price)
+    user_list.append(total_profit)
+    user_list.append(total_price)
     print("Profit: ${}".format(total_profit))
 
 
 # Main Routine
-
-# load initial data
 user_list_together = [['April Holman', 3, 'Pitachips']]
-
-# for each ticket order
 user_list = []
 global t_amount
 global snack_price_total
@@ -158,9 +158,7 @@ payment("Will you be paying cash or credit?(enter 1 or 2)\nIf paying with credit
         "Option 2\nCash                    Credit", "Please enter a valid input(1 or 2)"
                                                     "\nOption 1                "
                                                     "Option 2\nCash                    Credit")
-# calculate total profit
+profit()
 user_list_together.append(user_list)
 print(user_list)
 print(user_list_together)
-
-profit()
